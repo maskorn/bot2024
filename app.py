@@ -14,7 +14,7 @@ exchange = ccxt.binance()
 # 定义根路径
 @app.route('/')
 def home():
-    return "Welcome to the AI Trading Bot API"
+    return "Welcome to the AI Trading Bot API 2024"
 
 
 # 获取历史数据
@@ -69,6 +69,11 @@ def predict_route():
     data = request.json
     symbol = data['symbol']
     df = fetch_ohlcv(symbol)
+
+    # 检查 df 是否为 None
+    if df is None:
+        return jsonify({'error': 'Failed to fetch OHLCV data'}), 500
+
     df = feature_engineering(df)
     model = train_model(df)
     prediction = predict(model, df.tail(1))
@@ -80,4 +85,4 @@ def predict_route():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(host='0.0.0.0', port=5000)
